@@ -1,0 +1,145 @@
+#include<stdio.h>
+#include <math.h>
+#include<stdlib.h>
+
+int bin_dec();
+void dec_hex();
+void dec_bin();
+int hex_dec();
+
+
+int main(void)
+{
+	int n, decimalbin, decimalhex;
+	scanf("%d", &n);
+	int vetor[n];
+	char bases[n][5], number[n][32], hexabin[9], hexadec[9], binariodec[9], binariohex[9];
+
+	for(int i = 0; i < n; i++)
+	{
+		scanf("%s %s", number[i], bases[i]);
+	}
+
+	for(int i = 0; i < n; i++)
+	{
+		if(bases[i][0] != 'h')
+			vetor[i] = atoi(number[i]);
+	}
+
+	printf("\n");
+	for(int i = 0; i < n; i++)
+	{
+		printf("Case %d:\n", i + 1);
+		switch(bases[i][0])
+		{
+			case 'd':
+				dec_hex(vetor[i], hexadec);
+				dec_bin(vetor[i], binariodec);
+				printf("%s hex\n%s bin\n", hexadec, binariodec);
+				break;
+
+			case 'h':
+				decimalhex = hex_dec(number[i]);
+				dec_bin(decimalhex, binariohex);
+				printf("%d dec\n%s bin\n", decimalhex, binariohex);
+				break;
+
+			case 'b':
+				decimalbin = bin_dec(vetor[i]);
+				dec_hex(decimalbin, hexabin);
+				printf("%d dec\n%s hex\n", decimalbin, hexabin);
+				break;
+		}
+		printf("\n");
+	}
+}
+
+int bin_dec(int num)
+{
+	int vetor[32], i, result = 0;
+	for(i = 0; num != 0; i++)
+	{
+		vetor[i] = num % 10;
+		num /= 10;
+	}	
+	for(int j = 0; j < i; j++)
+	{
+		result = result + (vetor[j] * pow(2, j));
+	}
+
+	return result;
+}
+
+void dec_hex(int num, char* result)
+{
+	int vetor[8], i, k, j;
+	for(i = 0; num != 0; i++)
+	{
+		vetor[i] = num % 16;
+		num /= 16;
+	}
+	for(j = 0, k = i - 1; j < i; j++, k--)
+	{
+		if(vetor[k] == 10)
+			result[j] = 'a';
+		else if(vetor[k] == 11)
+			result[j] = 'b';
+		else if(vetor[k] == 12)
+			result[j] = 'c';
+		else if(vetor[k] == 13)
+			result[j] = 'd';
+		else if(vetor[k] == 14)
+			result[j] = 'e';			
+		else if(vetor[k] == 15)
+			result[j] = 'f';			
+		else
+			result[j] = '0' + vetor[k];
+	}
+	result[j] = '\0';
+}
+
+void dec_bin(int num, char* result)
+{
+	int vetor[10], i, j, k;
+	for(i = 0; num != 0; i++)
+	{
+		vetor[i] = num % 2;
+		num /= 2;
+	}
+	for(j = 0, k = i - 1; j < i; j++, k--)
+	{
+		if(vetor[k] == 1)
+			result[j] = '1';
+		else
+			result[j] = '0';
+	}
+	result[j] = '\0';
+}
+
+int hex_dec(char* number)
+{
+	int i, vetor[10], j, k, result = 0;
+	for(i = 0; number[i] != '\0'; i++)
+	{
+		if(number[i] == 'a')
+			vetor[i] = 10;
+		else if(number[i] == 'b')
+			vetor[i] = 11;
+		else if(number[i] == 'c')
+			vetor[i] = 12;
+		else if(number[i] == 'd')
+			vetor[i] = 13;
+		else if(number[i] == 'e')
+			vetor[i] = 14;			
+		else if(number[i] == 'f')
+			vetor[i] = 15;
+		else
+			vetor[i] = number[i] - '0';	
+	}
+
+	for(j = 0, k = i - 1; j < i; j++, k--)
+	{
+		result = result + (vetor[j] * pow(16, k));
+	}
+	return result;
+}
